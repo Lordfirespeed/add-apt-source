@@ -1,0 +1,30 @@
+# Exclude everything
+/*
+
+# Include specifically
+
+## Markdowns
+!*.md
+
+## Important Git files
+!.gitmodules
+!.gitignore
+!.gitattributes
+!.git-blame-ignore-revs
+
+## uv (package manager)
+!/pyproject.toml
+!/uv.lock
+!/.python-version
+
+## Sources
+!/src
+!/tests
+!/scripts
+
+## Python caches/compiled files
+__pycache__/
+*.py[oc]
+*.egg-info
+
+# Explicit exceptions/ignores
