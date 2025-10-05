@@ -4,7 +4,7 @@
 script_dirname=$(dirname "$( readlink -f "${BASH_SOURCE[0]:-"$( command -v -- "$0" )"}" )")
 
 if [[ ! $(type -t Import_Signing_Key_From_Keyserver) == function ]]; then
-  source "$script_dirname/signing_keys.sh"
+  source "$script_dirname/import-signing-keys.sh"
 fi
 
 owner_slug=${1:?missing owner_slug argument}
