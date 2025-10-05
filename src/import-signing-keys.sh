@@ -1,7 +1,11 @@
 #!/bin/bash
 
 # https://stackoverflow.com/a/77663806/11045433
-PROJECT_DIRNAME=$(dirname "$( readlink -f "${BASH_SOURCE[0]:-"$( command -v -- "$0" )"}" )")
+script_dirname=$(dirname "$( readlink -f "${BASH_SOURCE[0]:-"$( command -v -- "$0" )"}" )")
+
+if [[ ! $(type -t Maybe_Sudo) == function ]]; then
+  source "$script_dirname/maybe-sudo.sh"
+fi
 
 function Import_Signing_Key_From_Keyserver {
   key_fingerprint=${1:?missing key_fingerprint argument}
@@ -15,11 +19,11 @@ function Import_Signing_Key_From_Keyserver {
     --keyserver "$key_server" \
     --recv-keys "$key_fingerprint"
 
-  key_slug="$(gpg --show-keys "$temp_keyring" | python3 "$PROJECT_DIRNAME/extract_key_slug.py")"
+  key_slug="$(gpg --show-keys "$temp_keyring" | python3 "$script_dirname/extract_key_slug.py")"
   key_destination="$key_destination_dir/$key_slug.gpg"
 
-  sudo mkdir -p "$key_destination_dir"
-  sudo install -m 644 -o root -g root \
+  Maybe_Sudo mkdir -p "$key_destination_dir"
+  Maybe_Sudo install -m 644 -o root -g root \
     -T "$temp_keyring" "$key_destination"
   echo "$key_destination"
 }
@@ -37,8 +41,8 @@ function Import_Signing_Key_From_Url {
     --import
 
   key_destination="$key_destination_dir/$key_slug.gpg"
-  sudo mkdir -p "$key_destination_dir"
-  sudo install -m 644 -o root -g root \
+  Maybe_Sudo mkdir -p "$key_destination_dir"
+  Maybe_Sudo install -m 644 -o root -g root \
     -T "$temp_keyring" "$key_destination"
   echo "$key_destination"
 }
